@@ -24,9 +24,9 @@ class ThreeLetterWordle {
 
     async getRandomWord() {
         try {
-            const response = await fetch("https://random-word-api.herokuapp.com/word?number=1");
+            const response = await fetch("https://random-word-api.herokuapp.com/word?length=3");
             const words = await response.json();
-            return words[0].substring(0, 3).toUpperCase();
+            return words[0];
         } catch (error) {
             console.error('Error fetching random word:', error);
             return 'CAT'; // Fallback word
