@@ -14,7 +14,7 @@ class ThreeLetterWordle {
 
     async init() {
         try {
-            this.targetWord = await this.getRandomWord();
+            this.targetWord = "ROB"
             this.initializeBoard();
             this.initializeKeyboardListeners();
         } catch (error) {
