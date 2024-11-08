@@ -18,7 +18,7 @@ class ThreeLetterWordle {
             const date = new Date();
 // Format the date by extracting the date part of the ISO string
             const formattedDate = date.toISOString().split('T')[0];
-            this.targetWord = this.words[formattedDate];
+            this.targetWord = this.words[formattedDate].toUpperCase();
             this.initializeBoard();
             this.initializeKeyboardListeners();
         } catch (error) {
