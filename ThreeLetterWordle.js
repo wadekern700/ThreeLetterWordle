@@ -130,7 +130,7 @@ class ThreeLetterWordle {
 
     async checkWord() {
         const currentWord = this.cells[this.cellRow].join('');
-        let isValid = false;
+        let isValid = true;
         // Validate word exists
 if(currentWord != this.targetWord){
          isValid = await this.validateWord(currentWord);
