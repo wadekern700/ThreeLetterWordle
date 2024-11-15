@@ -173,7 +173,10 @@ if(currentWord != this.targetWord){
             ) {
                     this.colorElement(keyButton, cell, '#c9b458'); // Yellow
                 targetLetterCounts[currentWord[i]]--; // Reduce count for matched letters
-            }
+            }else{
+                                                 this.colorElement(keyButton, cell, '#787c7e'); // Gray
+
+                             }
                  }
             
         }
