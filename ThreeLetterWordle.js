@@ -154,9 +154,9 @@ if(currentWord != this.targetWord){
 
             if (guessedLetter === targetLetter) {
                 this.colorElement(keyButton, cell, '#6aaa64'); // Green
-                letterCounts[currentWord[i]]--; // Reduce count for matched letters
+                targetLetterCounts[currentWord[i]]--; // Reduce count for matched letters
 
-            } else if (this.targetWord.includes(guessedLetter) &&  letterCounts[currentWord[i]] > 0) {
+            } else if (this.targetWord.includes(guessedLetter) &&  targetLetterCounts[currentWord[i]] > 0) {
                 if (keyButton.style.backgroundColor !== '#6aaa64') {
                     this.colorElement(keyButton, cell, '#c9b458'); // Yellow
                 }
