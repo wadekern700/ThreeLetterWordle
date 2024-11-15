@@ -136,6 +136,7 @@ if(currentWord != this.targetWord){
          isValid = await this.validateWord(currentWord);
         if (!isValid) {
             this.showMessage('Not a valid word!');
+            return;
         }
 }
                 const targetLetterCounts = {};
