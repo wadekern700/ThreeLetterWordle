@@ -141,7 +141,7 @@ if(currentWord != this.targetWord){
 }
                 const targetLetterCounts = {};
 
-               for (const letter of targetWord) {
+               for (const letter of this.targetWord) {
             targetLetterCounts[letter] = (targetLetterCounts[letter] || 0) + 1;
     }
         // Check each letter
