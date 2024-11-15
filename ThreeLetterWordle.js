@@ -144,6 +144,21 @@ if(currentWord != this.targetWord){
                for (const letter of this.targetWord) {
             targetLetterCounts[letter] = (targetLetterCounts[letter] || 0) + 1;
     }
+    const feedback = Array(currentWord.length).fill("grey"); // Default feedback
+
+
+            for (let i = 0; i < currentWord.length; i++) {
+                      const guessedLetter = currentWord[i];
+            const targetLetter = this.targetWord[i];
+                   const keyButton = document.querySelector(`button[value="${guessedLetter}"]`);
+            const cell = document.querySelector(`[row="${this.cellRow}"][cell="${i}"]`);
+        if (currentWord[i] === targetWord[i]) {
+                  feedback[i] = "green";
+                  this.colorElement(keyButton, cell, '#6aaa64'); // Green
+                targetLetterCounts[currentWord[i]]--; // Reduce count for matched letters
+        }
+    }
+        
         // Check each letter
         for (let i = 0; i < currentWord.length; i++) {
             const guessedLetter = currentWord[i];
@@ -152,17 +167,16 @@ if(currentWord != this.targetWord){
             const keyButton = document.querySelector(`button[value="${guessedLetter}"]`);
             const cell = document.querySelector(`[row="${this.cellRow}"][cell="${i}"]`);
 
-            if (guessedLetter === targetLetter) {
-                this.colorElement(keyButton, cell, '#6aaa64'); // Green
-                targetLetterCounts[currentWord[i]]--; // Reduce count for matched letters
-
-            } else if (this.targetWord.includes(guessedLetter) &&  targetLetterCounts[currentWord[i]] > 0) {
-                if (keyButton.style.backgroundColor !== '#6aaa64') {
+                 if (feedback[i] === "grey") { // Only process if not already green
+                             if (
+                targetWord.includes(guessedWord[i]) &&
+                letterCounts[guessedWord[i]] > 0
+            ) {
                     this.colorElement(keyButton, cell, '#c9b458'); // Yellow
-                }
-            } else {
-                this.colorElement(keyButton, cell, '#787c7e'); // Gray
+                targetLetterCounts[currentWord[i]]--; // Reduce count for matched letters
             }
+                 }
+            
         }
 
         if (currentWord === this.targetWord) {
