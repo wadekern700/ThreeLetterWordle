@@ -130,17 +130,16 @@ class ThreeLetterWordle {
 
     async checkWord() {
         const currentWord = this.cells[this.cellRow].join('');
-        
+        let isValid = false;
         // Validate word exists
 if(currentWord != this.targetWord){
-        const isValid = await this.validateWord(currentWord);
+         isValid = await this.validateWord(currentWord);
         if (!isValid) {
             this.showMessage('Not a valid word!');
-            return;
         }
 }
                 const targetLetterCounts = {};
-
+      if(isValid){
                for (const letter of this.targetWord) {
             targetLetterCounts[letter] = (targetLetterCounts[letter] || 0) + 1;
     }
@@ -178,6 +177,7 @@ if(currentWord != this.targetWord){
                  }
             
         }
+      }
 
         if (currentWord === this.targetWord) {
             this.showMessage('Congratulations! You won!');
