@@ -152,7 +152,7 @@ if(currentWord != this.targetWord){
             const targetLetter = this.targetWord[i];
                    const keyButton = document.querySelector(`button[value="${guessedLetter}"]`);
             const cell = document.querySelector(`[row="${this.cellRow}"][cell="${i}"]`);
-        if (currentWord[i] === targetWord[i]) {
+        if (currentWord[i] === this.targetWord[i]) {
                   feedback[i] = "green";
                   this.colorElement(keyButton, cell, '#6aaa64'); // Green
                 targetLetterCounts[currentWord[i]]--; // Reduce count for matched letters
