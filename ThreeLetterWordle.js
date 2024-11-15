@@ -169,8 +169,8 @@ if(currentWord != this.targetWord){
 
                  if (feedback[i] === "grey") { // Only process if not already green
                              if (
-                this.targetWord.includes(guessedWord[i]) &&
-                letterCounts[guessedWord[i]] > 0
+                this.targetWord.includes(currentWord[i]) &&
+                letterCounts[currentWord[i]] > 0
             ) {
                     this.colorElement(keyButton, cell, '#c9b458'); // Yellow
                 targetLetterCounts[currentWord[i]]--; // Reduce count for matched letters
