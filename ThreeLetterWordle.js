@@ -41,11 +41,11 @@ class ThreeLetterWordle {
 
     initializeBoard() {
         const gameBoard = document.getElementById('game-board');
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 7; i++) {
             const row = document.createElement('div');
             row.className = 'row';
             
-            for (let j = 0; j < 7; j++) {
+            for (let j = 0; j < 8; j++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 cell.setAttribute('row', i.toString());
@@ -92,7 +92,7 @@ class ThreeLetterWordle {
     }
 
     letterClicked(letter) {
-        if (this.cellIndex < 3 && this.cellRow < 5) {
+        if (this.cellIndex < 8 && this.cellRow < 7) {
             this.cells[this.cellRow][this.cellIndex] = letter;
             const cell = document.querySelector(`[row="${this.cellRow}"][cell="${this.cellIndex}"]`);
             cell.textContent = letter;
@@ -112,7 +112,7 @@ class ThreeLetterWordle {
     }
 
     async enterClicked() {
-        if (this.cellIndex !== 3) return;
+        if (this.cellIndex !== 8) return;
         
         this.isDisabled = true;
         await this.checkWord();
@@ -189,7 +189,7 @@ if(currentWord != this.targetWord){
             return;
         }
 
-        if (this.cellRow < 4) {
+        if (this.cellRow < 8) {
             this.cellRow++;
             this.cellIndex = 0;
         } else {
