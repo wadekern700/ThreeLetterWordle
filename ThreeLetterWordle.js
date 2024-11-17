@@ -1,7 +1,7 @@
 class ThreeLetterWordle {
     constructor() {
         // Initialize properties
-        this.cells = Array(5).fill(null).map(() => Array(3).fill(''));
+        this.cells = Array(7).fill(null).map(() => Array(8).fill(''));
         this.cellIndex = 0;
         this.cellRow = 0;
         this.gameOver = false;
@@ -19,8 +19,8 @@ class ThreeLetterWordle {
             const date = new Date();
 // Format the date by extracting the date part of the ISO string
             const formattedDate = date.toISOString().split('T')[0];
-            this.targetWord = this.words[formattedDate].toUpperCase();
-      
+            // this.targetWord = this.words[formattedDate].toUpperCase();
+            this.targetWord = 'Rumajing';
             this.initializeBoard();
             this.initializeKeyboardListeners();
         } catch (error) {
