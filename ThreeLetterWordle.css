@@ -29,6 +29,14 @@ h1 {
     font-size: clamp(1.5rem, 4vw, 2rem);
     color: #1a1a1b;
 }
+h3 {
+    text-align: center;
+    min-height: 1.5rem;
+    margin: 0.5rem 0;
+    color: #d93025;
+    font-weight: bold;
+}
+
 
 .message {
     text-align: center;
@@ -53,7 +61,7 @@ h1 {
 }
 
 .cell {
-    width: clamp(3rem, 15vw, 4rem);
+    width: clamp(1rem, 8vw, 4rem);
     height: clamp(3rem, 15vw, 4rem);
     border: 2px solid #d3d6da;
     display: flex;
