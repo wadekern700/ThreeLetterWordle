@@ -41,11 +41,11 @@ class ThreeLetterWordle {
 
     initializeBoard() {
         const gameBoard = document.getElementById('game-board');
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 8; i++) {
             const row = document.createElement('div');
             row.className = 'row';
             
-            for (let j = 0; j < 3; j++) {
+            for (let j = 0; j < 7; j++) {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 cell.setAttribute('row', i.toString());
