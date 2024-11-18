@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Three Letter Wordle</title>
     <link rel="stylesheet" type="text/css" href="ThreeLetterWordle.css">
+
 </head>
 <body>
     <div class="container">
@@ -52,7 +53,109 @@
                 <button value="BACKSPACE" class="wide-button">⌫</button>
             </div>
         </div>
+        <input type="hidden" id="hiddenField" name="hiddenField" value="">
+
     </div>
-    <script src="ThreeLetterWordle.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBZ6TgiXWre5Cg-0Zedr9PgJaGVi4wwS9o",
+          authDomain: "threeletterwordle.firebaseapp.com",
+          projectId: "threeletterwordle",
+          storageBucket: "threeletterwordle.firebasestorage.app",
+          messagingSenderId: "961045484430",
+          appId: "1:961045484430:web:55c2cdada7e7ed8297cadf"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+        async function fetchWords() {
+            const words = [];
+            try {
+              const wordsQuery = query(
+                collection(db, "words"),
+                where("Date", "==", "2024-11-18") // Replace with dynamic date if needed
+              );
+              const querySnapshot = await getDocs(wordsQuery);
+      
+              querySnapshot.forEach((doc) => {
+                words.push({
+                  id: doc.id,
+                  word: doc.data().Word,
+                  date: doc.data().Date,
+                  definition: doc.data().definition, // Optional
+                });
+              });
+      
+              console.log("Words fetched:", words);
+      
+              // Set the value of the hidden field
+              const hiddenField = document.getElementById("hiddenField");
+              if (hiddenField) {
+                hiddenField.value = words[0]?.word || "No word found";
+              }
+      
+              return words;
+            } catch (error) {
+              console.error("Error getting documents: ", error);
+              return [];
+            }
+          }
+      
+          // Expose the fetchWords function globally for other scripts to use
+          window.fetchWords = fetchWords;
+        </script>
+      <script type="module">
+        // Wait for Firebase operations to complete before running the game
+        window.fetchWords().then((words) => {
+          console.log("Firebase operations completed. Starting game...");
+    
+          // Game initialization logic
+          if (words.length > 0) {
+            const word = words[0].word;
+            console.log(`The word for today is: ${word}`);
+            const wordContainer = document.getElementById("word-container");
+            const hiddenField = document.getElementById("hiddenField");
+           
+              if (hiddenField) {
+                hiddenField.value =word;
+              }
+            if (hiddenField) {
+                window.fetchWords().then(() => {
+                    console.log("Firebase operations completed. Loading ThreeLetterWordle.js...");
+                    const script = document.createElement("script");
+                    script.src = "ThreeLetterWordle.js";
+                    script.onload = () => {
+                      console.log("ThreeLetterWordle.js loaded and executed.");
+                      window.game = new ThreeLetterWordle();
+                    };
+                    script.onerror = () => {
+                      console.error("Failed to load ThreeLetterWordle.js.");
+                    };
+                    document.body.appendChild(script);
+                  });
+            }
+            // Add further game logic here
+          } else {
+            console.error("No words available for the selected date.");
+            const wordContainer = document.getElementById("word-container");
+            if (wordContainer) {
+              wordContainer.textContent = "No words found for today.";
+            }
+          }
+        });
+      </script>
+    <!-- <script src="ThreeLetterWordle.js"></script> -->
 </body>
 </html>
