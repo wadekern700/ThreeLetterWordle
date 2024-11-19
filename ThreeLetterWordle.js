@@ -24,7 +24,19 @@ class ThreeLetterWordle {
             const cacheName = 'wordle-cache'; // Name of the cache
 
             // Format the date by extracting the date part of the ISO string
-            this.formattedDate = date.toISOString().split('T')[0];
+const easternFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'America/New_York',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+// Format the current date
+const [month, day, year] = easternFormatter.formatToParts(new Date()).map(({ type, value }) =>
+  type === 'month' || type === 'day' || type === 'year' ? value : undefined
+).filter(Boolean);
+
+this.formattedDate = `${year}-${month}-${day}`;
              this.cache = await caches.open(cacheName);
 
              const cacheToday = await caches.match(`/wordle/${this.formattedDate}`);
