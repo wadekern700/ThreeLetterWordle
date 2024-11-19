@@ -1,185 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Three Letter Wordle</title>
-    <link rel="stylesheet" type="text/css" href="ThreeLetterWordle.css">
-
-</head>
-<body>
+    <link rel="stylesheet" type="text/css" href="ThreeLetterWordle.css" />
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <h1>Three Letter Wordle</h1>
-        </header>
+      <header>
+        <h1>Three Letter Wordle</h1>
+      </header>
 
-        <div id="message" class="message"></div>
-        
-        <div id="game-board" class="game-board"></div>
+      <div id="message" class="message"></div>
 
-        <div id="keyboard" class="keyboard">
-            <div class="keyboard-row">
-                <button value="Q">Q</button>
-                <button value="W">W</button>
-                <button value="E">E</button>
-                <button value="R">R</button>
-                <button value="T">T</button>
-                <button value="Y">Y</button>
-                <button value="U">U</button>
-                <button value="I">I</button>
-                <button value="O">O</button>
-                <button value="P">P</button>
-            </div>
-            <div class="keyboard-row">
-                <button value="A">A</button>
-                <button value="S">S</button>
-                <button value="D">D</button>
-                <button value="F">F</button>
-                <button value="G">G</button>
-                <button value="H">H</button>
-                <button value="J">J</button>
-                <button value="K">K</button>
-                <button value="L">L</button>
-            </div>
-            <div class="keyboard-row">
-                <button value="ENTER" class="wide-button">Enter</button>
-                <button value="Z">Z</button>
-                <button value="X">X</button>
-                <button value="C">C</button>
-                <button value="V">V</button>
-                <button value="B">B</button>
-                <button value="N">N</button>
-                <button value="M">M</button>
-                <button value="BACKSPACE" class="wide-button">⌫</button>
-            </div>
+      <div id="game-board" class="game-board"></div>
+
+      <div id="keyboard" class="keyboard">
+        <div class="keyboard-row">
+          <button value="Q">Q</button>
+          <button value="W">W</button>
+          <button value="E">E</button>
+          <button value="R">R</button>
+          <button value="T">T</button>
+          <button value="Y">Y</button>
+          <button value="U">U</button>
+          <button value="I">I</button>
+          <button value="O">O</button>
+          <button value="P">P</button>
         </div>
-        <input type="hidden" id="hiddenField" name="hiddenField" value="">
-
+        <div class="keyboard-row">
+          <button value="A">A</button>
+          <button value="S">S</button>
+          <button value="D">D</button>
+          <button value="F">F</button>
+          <button value="G">G</button>
+          <button value="H">H</button>
+          <button value="J">J</button>
+          <button value="K">K</button>
+          <button value="L">L</button>
+        </div>
+        <div class="keyboard-row">
+          <button value="ENTER" class="wide-button">Enter</button>
+          <button value="Z">Z</button>
+          <button value="X">X</button>
+          <button value="C">C</button>
+          <button value="V">V</button>
+          <button value="B">B</button>
+          <button value="N">N</button>
+          <button value="M">M</button>
+          <button value="BACKSPACE" class="wide-button">⌫</button>
+        </div>
+      </div>
+      <input type="hidden" id="hiddenField" name="hiddenField" value="" />
     </div>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
-    
+
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-        import { getFirestore, collection, query,doc, where,getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        query,
+        doc,
+        where,
+        getDoc,
+      } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-          apiKey: "AIzaSyBZ6TgiXWre5Cg-0Zedr9PgJaGVi4wwS9o",
-          authDomain: "threeletterwordle.firebaseapp.com",
-          projectId: "threeletterwordle",
-          storageBucket: "threeletterwordle.firebasestorage.app",
-          messagingSenderId: "961045484430",
-          appId: "1:961045484430:web:55c2cdada7e7ed8297cadf"
-        };
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBZ6TgiXWre5Cg-0Zedr9PgJaGVi4wwS9o",
+        authDomain: "threeletterwordle.firebaseapp.com",
+        projectId: "threeletterwordle",
+        storageBucket: "threeletterwordle.firebasestorage.app",
+        messagingSenderId: "961045484430",
+        appId: "1:961045484430:web:55c2cdada7e7ed8297cadf",
+      };
 
-        async function fetchWords() {
-            let words = 'cat'
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      async function fetchWords() {
+        let words = "cat";
         try {
-              const date = new Date();
-const easternFormatter = new Intl.DateTimeFormat('en-US', {
-  timeZone: 'America/New_York',
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-});
+          const date = new Date();
+          const easternFormatter = new Intl.DateTimeFormat("en-US", {
+            timeZone: "America/New_York",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          });
 
-// Format the current date
-const [month, day, year] = easternFormatter.formatToParts(new Date()).map(({ type, value }) =>
-  type === 'month' || type === 'day' || type === 'year' ? value : undefined
-).filter(Boolean);
+          // Format the current date
+          const [month, day, year] = easternFormatter
+            .formatToParts(new Date())
+            .map(({ type, value }) =>
+              type === "month" || type === "day" || type === "year"
+                ? value
+                : undefined
+            )
+            .filter(Boolean);
 
-this.formattedDate = `${year}-${month}-${day}`;             
-        const cacheName = 'wordle-cache'; // Name of the cache
-        const cache = await caches.open(cacheName);
+          this.formattedDate = `${year}-${month}-${day}`;
+          const cacheName = "wordle-cache"; // Name of the cache
+          const cache = await caches.open(cacheName);
 
-        const response = await cache.match(`/wordle/${formattedDate}`);
-        if (response) {
+          const response = await cache.match(`/wordle/${formattedDate}`);
+          if (response) {
             const puzzleData = await response.json();
             console.log(`Puzzle for ${date} retrieved from cache:`, puzzleData);
             return puzzleData.word;
-          } else{
-   const docRef = doc(db, "words", formattedDate);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    console.log("Document data:", docSnap.data());
-                    words=docSnap.data().word;
-                  } else {
-                   //  docSnap.data() will be undefined in this case
-                    console.log("No such document!");
-                  }
-
-
-            let guesses=[];
-            const puzzleData = {
-                date: formattedDate,
-                word: words ,
-                guesses:guesses
-                        };
-            await cache.put(`/wordle/${formattedDate}`, new Response(JSON.stringify(puzzleData), {
-                headers: { 'Content-Type': 'application/json' },
-              }));
-          
-            }
-        
-
-              return words;
-            } catch (error) {
-              console.error("Error getting documents: ", error);
-              return [];
-            }
-          }
-      
-          // Expose the fetchWords function globally for other scripts to use
-          window.fetchWords = fetchWords;
-        </script>
-      <script type="module">
-        // Wait for Firebase operations to complete before running the game
-        window.fetchWords().then((words) => {
-          console.log("Firebase operations completed. Starting game...");
-    
-          // Game initialization logic
-          if (words.length > 0) {
-            const word = words;
-            console.log(`The word for today is: ${word}`);
-            const wordContainer = document.getElementById("word-container");
-            const hiddenField = document.getElementById("hiddenField");
-           
-              if (hiddenField) {
-                hiddenField.value =word;
-              }
-            if (hiddenField) {
-                window.fetchWords().then(() => {
-                    console.log("Firebase operations completed. Loading ThreeLetterWordle.js...");
-                    const script = document.createElement("script");
-                    script.src = "ThreeLetterWordle.js";
-                    script.onload = () => {
-                      console.log("ThreeLetterWordle.js loaded and executed.");
-                      window.game = new ThreeLetterWordle();
-                    };
-                    script.onerror = () => {
-                      console.error("Failed to load ThreeLetterWordle.js.");
-                    };
-                    document.body.appendChild(script);
-                  });
-            }
-            // Add further game logic here
           } else {
-            console.error("No words available for the selected date.");
-            const wordContainer = document.getElementById("word-container");
-            if (wordContainer) {
-              wordContainer.textContent = "No words found for today.";
+            const docRef = doc(db, "words", formattedDate);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              console.log("Document data:", docSnap.data());
+              words = docSnap.data().word;
+            } else {
+              //  docSnap.data() will be undefined in this case
+              console.log("No such document!");
             }
+
+            let guesses = [];
+            const puzzleData = {
+              date: formattedDate,
+              word: words,
+              guesses: guesses,
+            };
+            await cache.put(
+              `/wordle/${formattedDate}`,
+              new Response(JSON.stringify(puzzleData), {
+                headers: { "Content-Type": "application/json" },
+              })
+            );
           }
-        });
-      </script>
+
+          return words;
+        } catch (error) {
+          console.error("Error getting documents: ", error);
+          return [];
+        }
+      }
+
+      // Expose the fetchWords function globally for other scripts to use
+      window.fetchWords = fetchWords;
+    </script>
+    <script type="module">
+      // Wait for Firebase operations to complete before running the game
+      window.fetchWords().then((words) => {
+        console.log("Firebase operations completed. Starting game...");
+
+        // Game initialization logic
+        if (words.length > 0) {
+          const word = words;
+          console.log(`The word for today is: ${word}`);
+          const wordContainer = document.getElementById("word-container");
+          const hiddenField = document.getElementById("hiddenField");
+
+          if (hiddenField) {
+            hiddenField.value = word;
+          }
+          if (hiddenField) {
+            window.fetchWords().then(() => {
+              console.log(
+                "Firebase operations completed. Loading ThreeLetterWordle.js..."
+              );
+              const script = document.createElement("script");
+              script.src = "ThreeLetterWordle.js";
+              script.onload = () => {
+                console.log("ThreeLetterWordle.js loaded and executed.");
+                window.game = new ThreeLetterWordle();
+              };
+              script.onerror = () => {
+                console.error("Failed to load ThreeLetterWordle.js.");
+              };
+              document.body.appendChild(script);
+            });
+          }
+          // Add further game logic here
+        } else {
+          console.error("No words available for the selected date.");
+          const wordContainer = document.getElementById("word-container");
+          if (wordContainer) {
+            wordContainer.textContent = "No words found for today.";
+          }
+        }
+      });
+    </script>
     <!-- <script src="ThreeLetterWordle.js"></script> -->
-</body>
+  </body>
 </html>
