@@ -6,7 +6,7 @@ class ThreeLetterWordle {
     constructor() {
         // Initialize properties
         // this.cells = 'Array(5).fill(null).map(() => Array(3).fill(''))
-        this.cellIndex = 0;
+         this.cellIndex = 0;
         this.cellRow = 0;
         this.gameOver = false;
         this.message = '';
@@ -19,9 +19,32 @@ class ThreeLetterWordle {
 
     async init() {
         try {
+       
             const date = new Date();
+            const cacheName = 'wordle-cache'; // Name of the cache
+
             // Format the date by extracting the date part of the ISO string
-            const formattedDate = date.toISOString().split('T')[0];
+            this.formattedDate = date.toISOString().split('T')[0];
+             this.cache = await caches.open(cacheName);
+
+             const cacheToday = await caches.match(`/wordle/${this.formattedDate}`);
+
+
+            if (cacheToday ) {
+                this.puzzleData = await cacheToday.json();
+                console.log(`Puzzle for ${date} retrieved from cache:`, this.puzzleData);
+                if(this.puzzleData.guesses.length>0){
+                    
+                }
+            }
+            //   } else {
+            //     const puzzleData = {
+            //         date: formattedDate,
+            //         word: words              };
+            //     await cache.put(`/wordle/${formattedDate}`, new Response(JSON.stringify(puzzleData), {
+            //         headers: { 'Content-Type': 'application/json' },
+            //       }));
+            //   }
             // this.targetWord = this.words[formattedDate].toUpperCase();
             console.log(document.getElementById('hiddenField').value);
             this.targetWord =document.getElementById('hiddenField').value.toUpperCase();
@@ -34,7 +57,7 @@ class ThreeLetterWordle {
             console.error('Error initializing game:', error);
         }
     }
-   
+      
       
    
     async getRandomWord() {
@@ -50,15 +73,46 @@ class ThreeLetterWordle {
 
     initializeBoard() {
         const gameBoard = document.getElementById('game-board');
+        let targetLetterCounts ={};
         for (let i = 0; i < this.rows; i++) {
             const row = document.createElement('div');
             row.className = 'row';
-            
+            for (const letter of this.targetWord) {
+                targetLetterCounts[letter] = (targetLetterCounts[letter] || 0) + 1;
+        }
             for (let j = 0; j < this.columns; j++) {
+
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 cell.setAttribute('row', i.toString());
                 cell.setAttribute('cell', j.toString());
+      
+
+                if(this.puzzleData.guesses[i]){   
+                    const keyButton = document.querySelector(`button[value="${this.puzzleData.guesses[i][j]}"]`);
+                    this.cellRow = i +1;
+                
+                                          this.colorElement(keyButton, cell, '#787c7e'); // Green
+
+                    cell.innerHTML = this.puzzleData.guesses[i][j];
+                    if (this.puzzleData.guesses[i][j] === this.targetWord[j]) {
+                                     this.colorElement(keyButton, cell, '#6aaa64'); // Green
+
+                        targetLetterCounts[this.puzzleData.guesses[i][j]]--; // Reduce count for matched letters
+
+                        // Reduce count for matched letters
+                     }else   if (
+                        this.targetWord.includes(this.puzzleData.guesses[i][j]) &&
+                        targetLetterCounts[this.puzzleData.guesses[i][j]] > 0
+                    ) {
+                                          this.colorElement(keyButton, cell, '#c9b458'); // Green
+
+                         
+                        targetLetterCounts[this.puzzleData.guesses[i][j]]--; // Reduce count for matched letters
+                    }else{
+        
+                                     }
+                }
                 row.appendChild(cell);
             }
             
@@ -167,7 +221,10 @@ if(currentWord != this.targetWord){
                 targetLetterCounts[currentWord[i]]--; // Reduce count for matched letters
         }
     }
-        
+        this.puzzleData.guesses.push(currentWord);
+        await this.cache.put(`/wordle/${this.formattedDate}`, new Response(JSON.stringify(this.puzzleData), {
+                    headers: { 'Content-Type': 'application/json' },
+                  }));
         // Check each letter
         for (let i = 0; i < currentWord.length; i++) {
             const guessedLetter = currentWord[i];
@@ -188,8 +245,8 @@ if(currentWord != this.targetWord){
 
                              }
                  }
-            
-        }
+             
+        
       }
 
         if (currentWord === this.targetWord) {
@@ -206,6 +263,7 @@ if(currentWord != this.targetWord){
             this.gameOver = true;
         }
     }
+}
 
     colorElement(keyButton, cell, color) {
         keyButton.style.backgroundColor = color;

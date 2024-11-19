@@ -81,22 +81,44 @@
     const db = getFirestore(app);
 
         async function fetchWords() {
-            let words = 'dog'
-            try {
-                const date = new Date();
-                const formattedDate = date.toISOString().split('T')[0];
-                const docRef = doc(db, "words", formattedDate);
+            let words = 'cat'
+        try {
+              const date = new Date();
+              const formattedDate = date.toISOString().split('T')[0];
+             
+        const cacheName = 'wordle-cache'; // Name of the cache
+        const cache = await caches.open(cacheName);
+
+        const response = await cache.match(`/wordle/${formattedDate}`);
+        if (response) {
+            const puzzleData = await response.json();
+            console.log(`Puzzle for ${date} retrieved from cache:`, puzzleData);
+            return puzzleData.word;
+          } else{
+   const docRef = doc(db, "words", formattedDate);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
                     console.log("Document data:", docSnap.data());
                     words=docSnap.data().word;
                   } else {
-                    // docSnap.data() will be undefined in this case
+                   //  docSnap.data() will be undefined in this case
                     console.log("No such document!");
                   }
-      
-         
-      
+
+
+            let guesses=[];
+            const puzzleData = {
+                date: formattedDate,
+                word: words ,
+                guesses:guesses
+                        };
+            await cache.put(`/wordle/${formattedDate}`, new Response(JSON.stringify(puzzleData), {
+                headers: { 'Content-Type': 'application/json' },
+              }));
+          
+            }
+        
+
               return words;
             } catch (error) {
               console.error("Error getting documents: ", error);
