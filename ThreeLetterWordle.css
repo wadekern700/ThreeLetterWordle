@@ -53,7 +53,7 @@ h1 {
 }
 
 .cell {
-    width: clamp(3rem, 15vw, 4rem);
+    width: clamp(3rem, 8vw, 4rem);
     height: clamp(3rem, 15vw, 4rem);
     border: 2px solid #d3d6da;
     display: flex;
