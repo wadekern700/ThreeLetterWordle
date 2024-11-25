@@ -46,8 +46,6 @@ class ThreeLetterWordle {
           `Puzzle for ${date} retrieved from cache:`,
           this.puzzleData
         );
-        if (this.puzzleData.guesses.length > 0) {
-        }
       }
 
       console.log(document.getElementById("hiddenField").value);
@@ -123,6 +121,14 @@ class ThreeLetterWordle {
       }
 
       gameBoard.appendChild(row);
+    }
+    if (this.puzzleData.gameOver) {
+      this.gameOver = true;
+      this.showMessage(`Game Over! The word was ${this.targetWord}`,false);
+    }
+    if (this.puzzleData.gameWon) {
+      this.gameOver = true;
+      this.showMessage(`Yon won! Check back tomorrow! ${this.targetWord}`,false);
     }
   }
 
@@ -270,7 +276,15 @@ class ThreeLetterWordle {
       }
 
       if (currentWord === this.targetWord) {
-        this.showMessage("Congratulations! You won!");
+        this.puzzleData.gameWon = true;
+        await this.cache.put(
+          `/wordle/${this.formattedDate}`,
+          new Response(JSON.stringify(this.puzzleData), {
+            headers: { "Content-Type": "application/json" },
+          })
+        );
+
+        this.showMessage("Congratulations! You won!",false);
         this.gameOver = true;
         return;
       }
@@ -279,7 +293,14 @@ class ThreeLetterWordle {
         this.cellRow++;
         this.cellIndex = 0;
       } else {
-        this.showMessage(`Game Over! The word was ${this.targetWord}`);
+        this.puzzleData.gameOver = true;
+        await this.cache.put(
+          `/wordle/${this.formattedDate}`,
+          new Response(JSON.stringify(this.puzzleData), {
+            headers: { "Content-Type": "application/json" },
+          })
+        );
+        this.showMessage(`Game Over! The word was ${this.targetWord}`,false);
         this.gameOver = true;
       }
     }
@@ -295,17 +316,19 @@ class ThreeLetterWordle {
     cell.style.animation = "flip 0.5s ease forwards";
   }
 
-  showMessage(msg) {
+  showMessage(msg, hide = true) {
     const messageElement = document.getElementById("message");
     messageElement.textContent = msg;
     messageElement.classList.add("show");
 
-    setTimeout(() => {
-      if (messageElement.textContent === msg) {
-        messageElement.classList.remove("show");
-        messageElement.textContent = "";
-      }
-    }, 3000);
+    if (hide) {
+      setTimeout(() => {
+        if (messageElement.textContent === msg) {
+          messageElement.classList.remove("show");
+          messageElement.textContent = "";
+        }
+      }, 3000);
+    }
   }
 }
 
