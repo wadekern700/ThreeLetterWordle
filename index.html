@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
     <title>Three Letter Wordle</title>
     <link rel="stylesheet" type="text/css" href="ThreeLetterWordle.css" />
   </head>
@@ -67,6 +68,7 @@
         doc,
         where,
         getDoc,
+        setDoc,
       } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
       // TODO: Add SDKs for Firebase products that you want to use
@@ -147,8 +149,23 @@
         }
       }
 
-      // Expose the fetchWords function globally for other scripts to use
-      window.fetchWords = fetchWords;
+      async function uploadWords(wordList) {
+        try {
+          for (const entry of wordList) {
+            await setDoc(doc(db, "words", entry.date), {
+              word: entry.word.toLowerCase()
+            }, { merge: false });
+            console.log(`Uploaded word for ${entry.date}: ${entry.word}`);
+          }
+          console.log("Upload completed successfully");
+        } catch (error) {
+          console.error("Error uploading words:", error);
+        }
+      }
+
+      // Expose functions to global scope properly
+      globalThis.fetchWords = fetchWords;
+      globalThis.uploadWords = uploadWords;
     </script>
     <script type="module">
       // Wait for Firebase operations to complete before running the game
